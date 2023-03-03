@@ -4,6 +4,8 @@ import time
 
 BUS_NUM = 1
 XY_ADDR = 0x57
+header_mv = 0x61;
+header_ok = 0x76;
 
 def handler(gpio, level, tick):
 	global pi
@@ -18,6 +20,10 @@ def handler(gpio, level, tick):
 	"""
 	CV stuff
 	"""
+	time.sleep(5);
+	
+	print("writing confirmation...")
+	pi.i2c_write_byte(xy, header_ok)
 
 if __name__ == "__main__":
 	print("initialising GPIO")
@@ -35,6 +41,7 @@ if __name__ == "__main__":
 	irq = pi.callback(21, pigpio.RISING_EDGE, handler)
 	print("I2C device initialised")
 	
+	print("waiting for interrupt")
 	while True:
 		print(".", end="", flush=True)
 		time.sleep(0.5);
