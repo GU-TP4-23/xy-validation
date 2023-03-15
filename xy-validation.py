@@ -5,8 +5,8 @@ import rasp_opencv
 
 BUS_NUM = 1
 XY_ADDR = 0x57
-header_mv = 0x61;
-header_ok = 0x76;
+header_mv = 0x61
+header_ok = 0x76
 
 def handler(gpio, level, tick):
 	global pi
@@ -30,7 +30,7 @@ def handler(gpio, level, tick):
 	if (new_x is None and new_y is None):
 		pass
 	
-	time.sleep(5);
+	time.sleep(5)
 	
 	print("writing confirmation...")
 	pi.i2c_write_byte(xy, header_ok)
@@ -44,7 +44,7 @@ if __name__ == "__main__":
 	print("GPIO initialised")
 	
 	print("intialising I2C slave device at ", XY_ADDR)
-	xy = pi.i2c_open(BUS_NUM, XY_ADDR);
+	xy = pi.i2c_open(BUS_NUM, XY_ADDR)
 	if not xy:
 		print("failed to initialise I2C device")
 		exit()
@@ -54,4 +54,4 @@ if __name__ == "__main__":
 	print("waiting for interrupt")
 	while True:
 		print(".", end="", flush=True)
-		time.sleep(0.5);
+		time.sleep(0.5)
