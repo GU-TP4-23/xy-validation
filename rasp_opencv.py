@@ -99,7 +99,26 @@ def main():
             else:
                 current_team_component += 1
 
+def call_CV(coor_x, coor_y, team, component):
+    # to be changed, needs to fit the calibration
+    image_width = 200
+    image_height = 200
+    cam = cv.VideoCapture(0)
 
+    compared_image = cv.imread(f"{team}//{component}")[:,:,1]
 
+    current_ret, current_image = cam.read()
+    current_image = current_image[:,:,1]
+    current_image = get_centre(current_image, image_width, image_height)
 
-main()
+    # note: save the compared image as sliced, and color flattened
+    similarity = cosine_similarity(current_image.flatten(),compared_image.flatten())
+    if similarity < 0.9:
+        current_ret, current_image = cam.read()
+        current_image = current_image[:,:,1]
+        windows = get_surrounding(current_image)
+        chosen = np.argmax([cosine_similarity(w, compared_image) for w in windows])
+        cartesian_movement_I2C = [XY_up, XY_down, XY_left, XY_right]
+        return cartesian_movement_I2C[chosen](coor_x, coor_y)
+    else:
+        return None, None

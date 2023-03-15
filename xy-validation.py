@@ -1,6 +1,7 @@
 import pigpio
 import struct
 import time
+import rasp_opencv
 
 BUS_NUM = 1
 XY_ADDR = 0x57
@@ -17,9 +18,18 @@ def handler(gpio, level, tick):
 	print("x:\t", x)
 	print("y:\t", y)
 	
+	
 	"""
 	CV stuff
 	"""
+	# used to track progress
+	team = 0
+	component = 0
+	new_x, new_y = rasp_opencv.call_CV(x,y,team, component)
+	# case when it is in position
+	if (new_x is None and new_y is None):
+		pass
+	
 	time.sleep(5);
 	
 	print("writing confirmation...")
